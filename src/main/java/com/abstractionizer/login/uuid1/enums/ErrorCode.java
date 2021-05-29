@@ -12,6 +12,7 @@ public enum ErrorCode implements BaseError{
     USER_LOGGED_IN(HttpStatus.INTERNAL_SERVER_ERROR, "10011", "This account has already been logged in"),
     USER_LOGGED_OUT(HttpStatus.BAD_REQUEST, "100012", "User has been logged out"),
     USERNAME_EXISTS(HttpStatus.INTERNAL_SERVER_ERROR, "10013", "Username already exists"),
+    TOKEN_GENERATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "10014", "Generate token failed"),
 
     ACCOUNT_FROZEN(HttpStatus.INTERNAL_SERVER_ERROR, "10020", "Your account has been frozen, please contact admin"),
     ACCOUNT_VALIDATION_EXPIRED(HttpStatus.NOT_FOUND, "10021", "Account validation is expired"),

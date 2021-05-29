@@ -11,4 +11,10 @@ import org.springframework.stereotype.Repository;
 public interface UserMapper extends BaseMapper<User> {
 
     int countByIdOrUsername(@Param("id") Integer id, @Param("username") String username);
+
+    User getByIdOrUsername(@Param("id") Integer id, @Param("username") String username);
+
+    int updateStatus(@Param("id") Integer id, @Param("status") boolean status);
+
+    int updateUserInfo(@Param("user") User user);
 }

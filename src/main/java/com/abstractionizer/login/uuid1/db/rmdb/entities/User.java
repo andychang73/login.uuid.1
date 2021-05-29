@@ -18,7 +18,7 @@ import java.util.Date;
 public class User {
 
     @TableId(type = IdType.AUTO)
-    private Integer userId;
+    private Integer id;
 
     private String username;
 
@@ -31,4 +31,8 @@ public class User {
     Date lastLoginTime;
 
     private boolean status;
+
+    public boolean getStatus(){
+        return this.status;
+    }
 }

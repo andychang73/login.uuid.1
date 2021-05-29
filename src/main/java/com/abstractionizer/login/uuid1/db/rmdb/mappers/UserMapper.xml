@@ -2,12 +2,48 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.abstractionizer.login.uuid1.db.rmdb.mappers.UserMapper">
 
+    <update id="updateStatus">
+        UPDATE user
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+    <update id="updateUserInfo">
+        UPDATE user
+        <set>
+            <if test="user.username != null and user.username != ''">
+                AND username = #{user.username}
+            </if>
+            <if test="user.email != null and user.email != ''">
+                AND email = #{user.email}
+            </if>
+            <if test="user.phone != null and user.phone != ''">
+                AND phone = #{user.phone}
+            </if>
+            <if test="user.lastLoginTime != null">
+                last_login_time = #{user.lastLoginTime}
+            </if>
+        </set>
+        WHERE id = #{user.id}
+    </update>
+
     <select id="countByIdOrUsername" resultType="java.lang.Integer">
         SELECT COUNT(id)
         FROM user
         <where>
             <if test="id != null or id > 0">
                 AND id = #{id}
+            </if>
+            <if test="username != null and username != ''">
+                AND username = #{username}
+            </if>
+        </where>
+    </select>
+    <select id="getByIdOrUsername" resultType="com.abstractionizer.login.uuid1.db.rmdb.entities.User">
+        SELECT *
+        FROM user
+        <where>
+            <if test="id != null and id > 0">
+                AND id =#{id}
             </if>
             <if test="username != null and username != ''">
                 AND username = #{username}

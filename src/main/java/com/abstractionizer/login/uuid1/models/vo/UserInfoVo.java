@@ -15,4 +15,5 @@ public class UserInfoVo {
     private String email;
     private String phone;
     private boolean status;
+
 }

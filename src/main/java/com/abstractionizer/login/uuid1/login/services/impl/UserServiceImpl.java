@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.Optional;
+
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
@@ -27,5 +30,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isUserExists(Integer userId, String username) {
         return userMapper.countByIdOrUsername(userId, username) > 0;
+    }
+
+    @Override
+    public Optional<User> getByIdOrUsername(Integer userId, String username) {
+        return Optional.ofNullable(userMapper.getByIdOrUsername(userId, username));
+    }
+
+    @Override
+    public void freezeAccount(Integer userId, boolean status) {
+        if(userMapper.updateStatus(userId, status) != 1){
+            throw new CustomException(ErrorCode.DATA_UPDATE_FAILED);
+        }
+    }
+
+    @Override
+    public void updateLastLoginTime(Integer id, Date now) {
+        if(userMapper.updateUserInfo(new User().setId(id).setLastLoginTime(now)) != 1){
+            throw new CustomException(ErrorCode.DATA_UPDATE_FAILED);
+        }
     }
 }
