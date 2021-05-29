@@ -59,7 +59,7 @@ public class RedisUtil {
     }
 
     public boolean deleteKey(@NonNull final String key){
-        return Objects.nonNull(key) || this.redisTemplate.delete(key);
+        return Objects.isNull(key) || this.redisTemplate.delete(key);
     }
 
 }

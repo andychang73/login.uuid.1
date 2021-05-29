@@ -7,6 +7,7 @@ import com.abstractionizer.login.uuid1.login.businesses.UserBusiness;
 import com.abstractionizer.login.uuid1.login.services.UserRegistrationService;
 import com.abstractionizer.login.uuid1.login.services.UserService;
 import com.abstractionizer.login.uuid1.models.bo.UserRegisterBo;
+import com.abstractionizer.login.uuid1.models.vo.UserInfoVo;
 import com.abstractionizer.login.uuid1.utils.MD5Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +42,23 @@ public class UserBusinessImpl implements UserBusiness {
         userRegistrationService.setUserRegisterInfo(uuid, user);
         userRegistrationService.setUserRegisteredName(bo.getUsername());
         userRegistrationService.sendEmail(bo.getEmail(), uuid);
+    }
+
+    @Override
+    public UserInfoVo validate(String token) {
+        if(token.isEmpty()){
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+        User user = userRegistrationService.getUserByToken(token).orElseThrow(()-> new CustomException(ErrorCode.ACCOUNT_VALIDATION_EXPIRED));
+
+        userService.create(user);
+        userRegistrationService.deleteUserRegisterInto(token);
+        userRegistrationService.deleteUserRegisteredName(user.getUsername());
+
+        return new UserInfoVo()
+                .setUserId(user.getUserId())
+                .setUsername(user.getEmail())
+                .setPhone(user.getPhone() == null ? null : user.getPhone())
+                .setStatus(true);
     }
 }
