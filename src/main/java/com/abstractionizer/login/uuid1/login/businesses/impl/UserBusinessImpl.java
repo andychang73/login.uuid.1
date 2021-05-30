@@ -7,19 +7,18 @@ import com.abstractionizer.login.uuid1.login.businesses.UserBusiness;
 import com.abstractionizer.login.uuid1.login.services.UserLoginService;
 import com.abstractionizer.login.uuid1.login.services.UserRegistrationService;
 import com.abstractionizer.login.uuid1.login.services.UserService;
+import com.abstractionizer.login.uuid1.models.bo.ChangePasswordBo;
 import com.abstractionizer.login.uuid1.models.bo.UserLoginBo;
 import com.abstractionizer.login.uuid1.models.bo.UserRegisterBo;
 import com.abstractionizer.login.uuid1.models.vo.LoginSuccessfulVo;
-import com.abstractionizer.login.uuid1.models.vo.UserInfoVo;
+import com.abstractionizer.login.uuid1.models.dto.UserInfo;
 import com.abstractionizer.login.uuid1.utils.MD5Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.UUID;
-
 import static com.abstractionizer.login.uuid1.constants.RedisConstant.getLoginFailureCount;
 
 @Slf4j
@@ -55,7 +54,7 @@ public class UserBusinessImpl implements UserBusiness {
     }
 
     @Override
-    public UserInfoVo validate(String token) {
+    public UserInfo validate(String token) {
         if(token.isEmpty()){
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
@@ -98,8 +97,31 @@ public class UserBusinessImpl implements UserBusiness {
         return new LoginSuccessfulVo(token);
     }
 
-    private UserInfoVo getUserInfoVo(User user){
-        return new UserInfoVo()
+    @Override
+    public void changePassword(Integer userId, ChangePasswordBo bo) {
+        if(Objects.equals(bo.getOldPassword(), bo.getNewPassword())){
+            throw new CustomException(ErrorCode.NEW_OLD_PASSWORD_SAME);
+        }
+        if(!Objects.equals(bo.getNewPassword(), bo.getConfirmPassword())){
+            throw new CustomException(ErrorCode.NEW_PASSWORD_INCONSISTENCY);
+        }
+
+        User user = userService.getByIdOrUsername(userId, null).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+        if(!Objects.equals(user.getPassword(), MD5Util.md5(bo.getOldPassword()))){
+            throw new CustomException(ErrorCode.INVALID_CREDENTIAL);
+        }
+
+        userService.changePassword(userId, MD5Util.md5(bo.getConfirmPassword()));
+    }
+
+    @Override
+    public void logout(Integer userId, String token) {
+        userLoginService.deleteLoggedInUser(userId);
+        userLoginService.deleteUserLoginToken(token);
+    }
+
+    private UserInfo getUserInfoVo(User user){
+        return new UserInfo()
                 .setUserId(user.getId())
                 .setUsername(user.getUsername())
                 .setEmail(user.getEmail())

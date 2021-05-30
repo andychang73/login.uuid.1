@@ -1,4 +1,4 @@
-package com.abstractionizer.login.uuid1.models.vo;
+package com.abstractionizer.login.uuid1.models.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class UserInfoVo {
+public class UserInfo {
     private Integer userId;
     private String username;
     private String email;

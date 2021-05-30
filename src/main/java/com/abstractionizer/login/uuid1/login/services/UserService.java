@@ -16,4 +16,6 @@ public interface UserService {
     void freezeAccount(Integer userId, boolean status);
 
     void updateLastLoginTime(Integer id, Date now);
+
+    void changePassword(Integer id, String password);
 }

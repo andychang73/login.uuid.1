@@ -50,4 +50,11 @@ public class UserServiceImpl implements UserService {
             throw new CustomException(ErrorCode.DATA_UPDATE_FAILED);
         }
     }
+
+    @Override
+    public void changePassword(Integer id, String password) {
+        if(userMapper.changePassword(id, password) != 1){
+            throw new CustomException(ErrorCode.DATA_UPDATE_FAILED);
+        }
+    }
 }

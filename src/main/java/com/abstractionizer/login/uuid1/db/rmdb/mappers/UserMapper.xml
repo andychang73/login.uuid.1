@@ -25,6 +25,11 @@
         </set>
         WHERE id = #{user.id}
     </update>
+    <update id="changePassword">
+        UPDATE user
+        SET password = #{password}
+        WHERE id = #{id}
+    </update>
 
     <select id="countByIdOrUsername" resultType="java.lang.Integer">
         SELECT COUNT(id)

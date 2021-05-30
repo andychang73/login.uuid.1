@@ -17,4 +17,6 @@ public interface UserMapper extends BaseMapper<User> {
     int updateStatus(@Param("id") Integer id, @Param("status") boolean status);
 
     int updateUserInfo(@Param("user") User user);
+
+    int changePassword(@Param("id") Integer id, @Param("password") String password);
 }

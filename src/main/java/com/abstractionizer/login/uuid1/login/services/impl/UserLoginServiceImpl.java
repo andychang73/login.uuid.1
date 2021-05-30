@@ -4,7 +4,7 @@ import com.abstractionizer.login.uuid1.constants.RedisConstant;
 import com.abstractionizer.login.uuid1.enums.ErrorCode;
 import com.abstractionizer.login.uuid1.exceptions.CustomException;
 import com.abstractionizer.login.uuid1.login.services.UserLoginService;
-import com.abstractionizer.login.uuid1.models.vo.UserInfoVo;
+import com.abstractionizer.login.uuid1.models.dto.UserInfo;
 import com.abstractionizer.login.uuid1.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +35,13 @@ public class UserLoginServiceImpl implements UserLoginService {
     @Override
     public void setLoggedInUser(Integer userId) {
         if(!redisUtil.set(getUserLoggedIn(userId), userId, tokenValidity, TimeUnit.MINUTES)){
+            throw new CustomException(ErrorCode.DATA_INSERT_FAILED);
+        }
+    }
+
+    @Override
+    public void deleteLoggedInUser(Integer userId) {
+        if(!redisUtil.deleteKey(getUserLoggedIn(userId))){
             throw new CustomException(ErrorCode.DATA_INSERT_FAILED);
         }
     }
@@ -83,10 +90,15 @@ public class UserLoginServiceImpl implements UserLoginService {
     }
 
     @Override
-    public void setUserLoginToken(String token, UserInfoVo userInfoVo) {
-        if(!redisUtil.set(getLoginToken(token), userInfoVo, tokenValidity, TimeUnit.MINUTES)){
+    public void setUserLoginToken(String token, UserInfo userInfo) {
+        if(!redisUtil.set(getLoginToken(token), userInfo, tokenValidity, TimeUnit.MINUTES)){
             throw new CustomException(ErrorCode.DATA_INSERT_FAILED);
         }
+    }
+
+    @Override
+    public Optional<UserInfo> getUserInfoByToken(String token) {
+        return Optional.ofNullable(redisUtil.get(getLoginToken(token), UserInfo.class));
     }
 
     @Override
