@@ -12,10 +12,10 @@ public class UpdateInfoBo {
     private String username;
 
     @NullOrNotBlank(message = "can be null but nor empty")
-    @Pattern(regexp = "^(.*)@(,*)$")
+    @Pattern(regexp = "^(.*)@(.*)$")
     private String email;
 
     @NullOrNotBlank(message = "can be null but nor empty")
-    @Pattern(regexp = "^09\\d{8}&")
+    @Pattern(regexp = "^09\\d{8}$")
     private String phone;
 }

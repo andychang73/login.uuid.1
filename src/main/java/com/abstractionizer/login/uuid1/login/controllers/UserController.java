@@ -2,6 +2,7 @@ package com.abstractionizer.login.uuid1.login.controllers;
 
 import com.abstractionizer.login.uuid1.login.businesses.UserBusiness;
 import com.abstractionizer.login.uuid1.models.bo.ChangePasswordBo;
+import com.abstractionizer.login.uuid1.models.bo.UpdateInfoBo;
 import com.abstractionizer.login.uuid1.models.bo.UserLoginBo;
 import com.abstractionizer.login.uuid1.models.bo.UserRegisterBo;
 import com.abstractionizer.login.uuid1.models.vo.LoginSuccessfulVo;
@@ -37,17 +38,23 @@ public class UserController{
         return new SuccessResponse<>(userBusiness.login(bo));
     }
 
+    @PutMapping("/update")
+    public SuccessResponse<UserInfo> updateInfo(@RequestAttribute("userInfo") UserInfo userInfo,
+                                                @RequestBody @Valid UpdateInfoBo bo){
+        return new SuccessResponse<>(userBusiness.updateInfo(userInfo.getId(), bo));
+    }
+
     @PutMapping("/changePassword")
     public SuccessResponse changePassword(@RequestAttribute("userInfo") UserInfo userInfo,
                                           @RequestBody @Valid ChangePasswordBo bo){
-        userBusiness.changePassword(userInfo.getUserId(), bo);
+        userBusiness.changePassword(userInfo.getId(), bo);
         return new SuccessResponse();
     }
 
     @GetMapping("/logout")
     public SuccessResponse logout(@RequestHeader("token") String token,
                                   @RequestAttribute("userInfo") UserInfo userInfo){
-        userBusiness.logout(userInfo.getUserId(), token);
+        userBusiness.logout(userInfo.getId(), token);
         return new SuccessResponse();
     }
 }

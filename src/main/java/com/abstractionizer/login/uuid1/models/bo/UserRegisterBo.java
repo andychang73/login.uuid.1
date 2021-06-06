@@ -16,7 +16,7 @@ public class UserRegisterBo {
     private String password;
 
     @NotEmpty(message = "not must be null or empty")
-    @Pattern(regexp = "^(.*)@(.*$)", message = "invalid format")
+    @Pattern(regexp = "^(.*)@(.*)$", message = "invalid format")
     private String email;
 
     @NullOrNotBlank(message = "can be null but not empty")

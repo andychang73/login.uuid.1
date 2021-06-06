@@ -10,24 +10,26 @@
     <update id="updateUserInfo">
         UPDATE user
         <set>
-            <if test="user.username != null and user.username != ''">
-                AND username = #{user.username}
+            <if test="bo.username != null and bo.username != ''">
+                username = #{bo.username},
             </if>
-            <if test="user.email != null and user.email != ''">
-                AND email = #{user.email}
+            <if test="bo.email != null and bo.email != ''">
+                email = #{bo.email},
             </if>
-            <if test="user.phone != null and user.phone != ''">
-                AND phone = #{user.phone}
-            </if>
-            <if test="user.lastLoginTime != null">
-                last_login_time = #{user.lastLoginTime}
+            <if test="bo.phone != null and bo.phone != ''">
+                phone = #{bo.phone},
             </if>
         </set>
-        WHERE id = #{user.id}
+        WHERE id = #{id}
     </update>
     <update id="changePassword">
         UPDATE user
         SET password = #{password}
+        WHERE id = #{id}
+    </update>
+    <update id="updateLastLoginTime">
+        UPDATE user
+        set last_login_time = #{lastLoginTime}
         WHERE id = #{id}
     </update>
 
@@ -54,5 +56,10 @@
                 AND username = #{username}
             </if>
         </where>
+    </select>
+    <select id="getUserInfoById" resultType="com.abstractionizer.login.uuid1.models.dto.UserInfo">
+        SELECT id, username, email, phone, status
+        FROM user
+        WHERE id = #{id}
     </select>
 </mapper>

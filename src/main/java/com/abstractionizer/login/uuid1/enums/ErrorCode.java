@@ -7,6 +7,7 @@ public enum ErrorCode implements BaseError{
     DATA_UPDATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "10001", "Data update failed"),
     DATA_DELETION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "10002", "Failed to delete data"),
     DATA_NOT_FOUND(HttpStatus.NOT_FOUND, "10003", "Data not found"),
+    NO_DATA_TO_UPDATE(HttpStatus.BAD_REQUEST, "10004", "No data to update"),
 
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "10010", "User account does not exist"),
     USER_LOGGED_IN(HttpStatus.INTERNAL_SERVER_ERROR, "10011", "This account has already been logged in"),

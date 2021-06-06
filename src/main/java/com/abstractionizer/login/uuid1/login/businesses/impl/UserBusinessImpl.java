@@ -8,6 +8,7 @@ import com.abstractionizer.login.uuid1.login.services.UserLoginService;
 import com.abstractionizer.login.uuid1.login.services.UserRegistrationService;
 import com.abstractionizer.login.uuid1.login.services.UserService;
 import com.abstractionizer.login.uuid1.models.bo.ChangePasswordBo;
+import com.abstractionizer.login.uuid1.models.bo.UpdateInfoBo;
 import com.abstractionizer.login.uuid1.models.bo.UserLoginBo;
 import com.abstractionizer.login.uuid1.models.bo.UserRegisterBo;
 import com.abstractionizer.login.uuid1.models.vo.LoginSuccessfulVo;
@@ -115,6 +116,14 @@ public class UserBusinessImpl implements UserBusiness {
     }
 
     @Override
+    public UserInfo updateInfo(Integer userId, UpdateInfoBo bo) {
+        if(Objects.isNull(bo.getUsername()) && Objects.isNull(bo.getEmail()) && Objects.isNull(bo.getPhone())){
+            throw new CustomException(ErrorCode.NO_DATA_TO_UPDATE);
+        }
+        return userService.updateInfo(userId, bo);
+    }
+
+    @Override
     public void logout(Integer userId, String token) {
         userLoginService.deleteLoggedInUser(userId);
         userLoginService.deleteUserLoginToken(token);
@@ -122,7 +131,7 @@ public class UserBusinessImpl implements UserBusiness {
 
     private UserInfo getUserInfoVo(User user){
         return new UserInfo()
-                .setUserId(user.getId())
+                .setId(user.getId())
                 .setUsername(user.getUsername())
                 .setEmail(user.getEmail())
                 .setPhone(user.getPhone() == null ? null : user.getPhone())
